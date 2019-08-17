@@ -46,7 +46,7 @@
   let five = 5;
 
   let history = [];
-  $: nextPlayer = history.length % 2 === 0 ? "x" : "o"
+  $: nextPlayer = history.length % 2 === 0 ? "x" : "o";
 
   let genTable = history => {
     let table = Array(size)
@@ -117,25 +117,52 @@
     text-align: center;
     vertical-align: center;
   }
+  td.x {
+    background: rgb(255, 207, 179);
+  }
+  td.o {
+    background: rgb(205, 255, 129);
+  }
   table {
     border-collapse: collapse;
+    vertical-align: center;
+  }
+  .verticalMargin1 {
+    margin: 1em 0;
+  }
+  th {
+    font-weight: normal;
+    padding-right: 1em;
   }
 </style>
 
 <h1>Gomoku</h1>
-
-<p>Next player: {nextPlayer}</p>
+<div class="verticalMargin1">
+  <table style="display: inline">
+    <tr>
+      <th>Next player:</th>
+      <td class={nextPlayer}>{nextPlayer}</td>
+    </tr>
+  </table>
+</div>
 
 <table>
   {#each table as row, i}
     <tr>
       {#each row as item, j}
-        <td on:click={getOnclick(i, j)}>{item}</td>
+        <td on:click={getOnclick(i, j)} class={item}>{item}</td>
       {/each}
     </tr>
   {/each}
 </table>
 
-{#if winner !== ""}
-<p>Winner: {winner}</p>
+{#if winner !== ''}
+  <div class="verticalMargin1">
+    <table style="display: inline">
+      <tr>
+        <th>Winner:</th>
+        <td class={winner}>{winner}</td>
+      </tr>
+    </table>
+  </div>
 {/if}
