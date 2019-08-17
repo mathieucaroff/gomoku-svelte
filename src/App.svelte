@@ -46,14 +46,16 @@
   let five = 5;
 
   let history = [];
-  $: nextPlayer = history.length % 2 === 0 ? "x" : "o";
+
+  let xo = k => (k % 2 === 0 ? "x" : "o");
+  $: nextPlayer = xo(history.length);
 
   let genTable = history => {
     let table = Array(size)
       .fill(0)
       .map(() => Array(size).fill(""));
     history.forEach(([i, j], k) => {
-      table[i][j] = k % 2 === 0 ? "x" : "o";
+      table[i][j] = xo(k);
     });
     return table;
   };
@@ -109,11 +111,18 @@
   h1 {
     color: purple;
   }
-  td {
-    --size: 2em;
+  #history td {
+    border: 1px solid;
+    text-align: center;
+    vertical-align: center;
+  }
+  td.x,
+  td.o,
+  td.empty {
+    --size: 1.5em;
     width: var(--size);
     height: var(--size);
-    border: 1px solid black;
+    border: 1px solid;
     text-align: center;
     vertical-align: center;
   }
@@ -130,39 +139,63 @@
   .verticalMargin1 {
     margin: 1em 0;
   }
-  th {
+  #nextPlayer th {
     font-weight: normal;
     padding-right: 1em;
+  }
+  #winner th {
+    padding-right: 1em;
+  }
+  .inline {
+    display: inline;
   }
 </style>
 
 <h1>Gomoku</h1>
+
 <div class="verticalMargin1">
-  <table style="display: inline">
-    <tr>
-      <th>Next player:</th>
-      <td class={nextPlayer}>{nextPlayer}</td>
-    </tr>
-  </table>
-</div>
-
-<table>
-  {#each table as row, i}
-    <tr>
-      {#each row as item, j}
-        <td on:click={getOnclick(i, j)} class={item}>{item}</td>
-      {/each}
-    </tr>
-  {/each}
-</table>
-
-{#if winner !== ''}
-  <div class="verticalMargin1">
-    <table style="display: inline">
+  {#if winner === ''}
+    <table class="inline" id="nextPlayer">
+      <tr>
+        <th>Next player:</th>
+        <td class={nextPlayer}>{nextPlayer}</td>
+      </tr>
+    </table>
+  {:else}
+    <table class="inline" id="winner">
       <tr>
         <th>Winner:</th>
         <td class={winner}>{winner}</td>
       </tr>
     </table>
-  </div>
-{/if}
+  {/if}
+</div>
+
+<table class="inline" id="board">
+  {#each table as row, i}
+    <tr>
+      {#each row as item, j}
+        <td on:click={getOnclick(i, j)} class={item !== '' ? item : 'empty'}>
+          {item}
+        </td>
+      {/each}
+    </tr>
+  {/each}
+</table>
+
+<table class="inline" id="history">
+  <thead>
+    <th>n°</th>
+    <th />
+    <th>i, j</th>
+  </thead>
+  <tbody>
+    {#each history as [i, j], k}
+      <tr>
+        <th>{k}</th>
+        <td class={xo(k)}>{xo(k)}</td>
+        <td>{i}, {j}</td>
+      </tr>
+    {/each}
+  </tbody>
+</table>
