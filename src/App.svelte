@@ -61,12 +61,11 @@
   };
   $: table = genTable(history);
 
-  let getOnclick = (i, j) => ev => {
+  let getMoveHandler = (i, j) => ev => {
     if (table[i][j] || winner) {
       return;
     }
     history = [...history, [i, j]];
-    console.log({ i, j });
   };
 
   let someRow = (player, five, table) => {
@@ -175,7 +174,9 @@
   {#each table as row, i}
     <tr>
       {#each row as item, j}
-        <td on:click={getOnclick(i, j)} class={item !== '' ? item : 'empty'}>
+        <td
+          on:click={getMoveHandler(i, j)}
+          class={item !== '' ? item : 'empty'}>
           {item}
         </td>
       {/each}
