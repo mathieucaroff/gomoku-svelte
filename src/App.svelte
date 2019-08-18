@@ -68,6 +68,10 @@
     history = [...history, [i, j]];
   };
 
+  let getHistoryHandler = k => ev => {
+    history = history.slice(0, k);
+  };
+
   let someRow = (player, five, table) => {
     return table.some(row => {
       let total = 0;
@@ -148,6 +152,17 @@
   .inline {
     display: inline;
   }
+  .lowhight {
+    height: 2em;
+  }
+  .vcenter {
+    vertical-align: center;
+  }
+  input[type='button'] {
+    margin: 0;
+    padding: 1px;
+    height: auto;
+  }
 </style>
 
 <h1>Gomoku</h1>
@@ -189,6 +204,7 @@
     <th>n°</th>
     <th />
     <th>i, j</th>
+    <th />
   </thead>
   <tbody>
     {#each history as [i, j], k}
@@ -196,6 +212,11 @@
         <th>{k}</th>
         <td class={xo(k)}>{xo(k)}</td>
         <td>{i}, {j}</td>
+        <td>
+          {#if k + 1 !== history.length}
+            <input type="button" value="Go back" on:click={getHistoryHandler(k + 1)} />
+          {/if}
+        </td>
       </tr>
     {/each}
   </tbody>
