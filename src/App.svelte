@@ -70,24 +70,16 @@
 </script>
 
 <style>
+  main {
+    max-width: 770px;
+    margin: 0 auto;
+    border-width: 0 1px 0 1px;
+    border-style: solid;
+    padding: 1em;
+  }
   h1 {
     color: purple;
-  }
-  td.x,
-  td.o,
-  td.empty {
-    --size: 1.5em;
-    width: var(--size);
-    height: var(--size);
-    border: 1px solid;
-    text-align: center;
-    vertical-align: center;
-  }
-  td.x {
-    background: rgb(255, 207, 179);
-  }
-  td.o {
-    background: rgb(205, 255, 129);
+    margin-top: 0;
   }
   table {
     border-collapse: collapse;
@@ -98,8 +90,26 @@
     padding: 1px;
     height: auto;
   }
-  .verticalMargin1 {
-    margin: 1em 0;
+  td.x,
+  td.o,
+  td.empty {
+    --size: 1.5em;
+    width: var(--size);
+    height: var(--size);
+    border: 1px solid;
+    text-align: center;
+    vertical-align: top;
+  }
+  td.x {
+    background: rgb(255, 207, 179);
+  }
+  td.o {
+    background: rgb(205, 255, 129);
+  }
+  .hcenter {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
   }
   .inline {
     display: inline;
@@ -108,7 +118,24 @@
     height: 2em;
   }
   .vcenter {
+    vertical-align: middle;
+  }
+  .vmargin {
+    margin: 1em 0;
+  }
+  #board {
+    margin-right: 2em;
+  }
+  #board tbody {
+    border: 2px solid;
+  }
+  #history td {
+    border: 1px solid;
+    text-align: center;
     vertical-align: center;
+  }
+  #history .ij {
+    min-width: 3em;
   }
   #nextPlayer th {
     font-weight: normal;
@@ -117,85 +144,90 @@
   #winner th {
     padding-right: 1em;
   }
-  #history td {
-    border: 1px solid;
-    text-align: center;
-    vertical-align: center;
-  }
-  #history .ij {
-    width: 3em;
-  }
 </style>
 
-<h1>Gomoku</h1>
+<main>
+  <h1>Gomoku</h1>
 
-<div class="verticalMargin1">
-  {#if winner === ''}
-    <table class="inline" id="nextPlayer">
-      <tr>
-        <th>Next player:</th>
-        <td class={nextPlayer}>{nextPlayer}</td>
-      </tr>
-    </table>
-  {:else}
-    <table class="inline" id="winner">
-      <tr>
-        <th>Winner:</th>
-        <td class={winner}>{winner}</td>
-      </tr>
-    </table>
-  {/if}
-</div>
+  <p id="rules">
+    Fill a row, a column or a diagonal of five squares of your color to win.
+  </p>
 
-<table class="inline" id="board">
-  {#each table as row, i}
-    <tr>
-      {#each row as item, j}
-        <td
-          on:click={getMoveHandler(i, j)}
-          class={item !== '' ? item : 'empty'}>
-          {item}
-        </td>
-      {/each}
-    </tr>
-  {/each}
-</table>
-
-<table class="inline" id="history">
-  <thead>
-    <th>n°</th>
-    <th />
-    <th>i, j</th>
-    <th />
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td class="empty" />
-      <td class="ij" />
-      <td>
-        {#if history.length > 0}
-          <input
-            type="button"
-            value="Go back"
-            on:click={getHistoryHandler(0)} />
-        {/if}
+  <table class="inline" id="board">
+    <thead>
+      <td colspan={size}>
+        <div class="vmargin hcenter">
+          <span>
+            {#if winner === ''}
+              <table class="inline" id="nextPlayer">
+                <tr>
+                  <th>Next player:</th>
+                  <td class={nextPlayer}>{nextPlayer}</td>
+                </tr>
+              </table>
+            {:else}
+              <table class="inline" id="winner">
+                <tr>
+                  <th>Winner:</th>
+                  <td class={winner}>{winner}</td>
+                </tr>
+              </table>
+            {/if}
+          </span>
+        </div>
       </td>
-    </tr>
-    {#each history as [i, j], k}
+    </thead>
+    <tbody>
+      {#each table as row, i}
+        <tr>
+          {#each row as item, j}
+            <td
+              on:click={getMoveHandler(i, j)}
+              class={item !== '' ? item : 'empty'}>
+              {item}
+            </td>
+          {/each}
+        </tr>
+      {/each}
+    </tbody>
+  </table>
+
+  <table class="inline" id="history">
+    <thead>
+      <th>n°</th>
+      <th />
+      <th>i, j</th>
+      <th />
+    </thead>
+    <tbody>
       <tr>
-        <th>{k + 1}</th>
-        <td class={xo(k)}>{xo(k)}</td>
-        <td class="ij">{i}, {j}</td>
+        <th>0</th>
+        <td class="empty" />
+        <td class="ij" />
         <td>
-          {#if k + 1 !== history.length}
+          {#if history.length > 0}
             <input
               type="button"
               value="Go back"
-              on:click={getHistoryHandler(k + 1)} />
+              on:click={getHistoryHandler(0)} />
           {/if}
         </td>
       </tr>
-    {/each}
-  </tbody>
-</table>
+      {#each history as [i, j], k}
+        <tr>
+          <th>{k + 1}</th>
+          <td class={xo(k)}>{xo(k)}</td>
+          <td class="ij">{i}, {j}</td>
+          <td>
+            {#if k + 1 !== history.length}
+              <input
+                type="button"
+                value="Go back"
+                on:click={getHistoryHandler(k + 1)} />
+            {/if}
+          </td>
+        </tr>
+      {/each}
+    </tbody>
+  </table>
+</main>
