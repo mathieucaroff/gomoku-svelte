@@ -66,6 +66,7 @@
   };
 
   $: winner = victory(table);
+  $: playing = winner === "";
   $: console.log({ winner });
 </script>
 
@@ -123,8 +124,9 @@
   .vmargin {
     margin: 1em 0;
   }
-  #board {
+  #board.playing td.empty {
     margin-right: 2em;
+    cursor: pointer;
   }
   #board tbody {
     border: 2px solid;
@@ -153,7 +155,7 @@
     Fill a row, a column or a diagonal of five squares of your color to win.
   </p>
 
-  <table class="inline" id="board">
+  <table class="inline" class:playing id="board">
     <thead>
       <td colspan={size}>
         <div class="vmargin hcenter">
