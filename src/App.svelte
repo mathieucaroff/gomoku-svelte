@@ -112,7 +112,7 @@
       let move = selectIaMove(table);
       if (move) {
         let [x, y] = move;
-        if (table[y][x] === "") {
+        if (table[y][x] === "" && winner === "") {
           history = [...history, move];
         }
       } else {
@@ -266,7 +266,7 @@
       <input
         type="button"
         value="AI play"
-        disabled={currentPlayer !== 'AI'}
+        disabled={playing}
         on:click={aiPlay} />
     </p>
   {/if}
