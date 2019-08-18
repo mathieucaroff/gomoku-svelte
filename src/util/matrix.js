@@ -1,12 +1,5 @@
-import { assert } from "./assert";
-
 export const transpose = array => {
-  // Source:
-  // https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_chunk
-  if (array.length === 0) {
-    return [];
-  }
-  return array[0].map((col, i) => array.map(row => row[i]));
+  return (array[0] || []).map((col, i) => array.map(row => row[i]));
 };
 
 export const rot45 = array => {
@@ -32,7 +25,11 @@ export const rot45 = array => {
     });
 };
 
-assert([[0], [1]], rot45([[0], [1]]));
-assert([[0], [1], [2]], rot45([[0], [1], [2]]));
-assert([[1], [0]], rot45([[0, 1]]));
-assert([[2], [1], [0]], rot45([[0, 1, 2]]));
+let a01235678 = Array(9)
+  .fill(0)
+  .map((_, k) => k)
+  .filter(k => k !== 4);
+
+export const around8 = a01235678.map(k => [Math.floor(k / 3) - 1, (k % 3) - 1]);
+
+export const surrounding8 = ([a, b]) => around8.map(([x, y]) => [a + x, b + y]);

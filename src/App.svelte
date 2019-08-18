@@ -1,8 +1,26 @@
 <script>
-  import { transpose, rot45 } from "./util/matrix";
+  import { around8, transpose, rot45 } from "./util/matrix";
+  import { randchoice, randint } from "./util/random";
 
   let size = 19;
   let five = 5;
+
+  let opponentExpanded = false;
+  let selectedStyle;
+  let styleList = [
+    "human vs human",
+    (selectedStyle = "human vs AI"),
+    "AI vs human",
+    "AI vs AI"
+  ];
+
+  let aiStyleExpanded = false;
+  let selectedAiStyle;
+  let aiStyleList = [(selectedAiStyle = "automatic"), "manual"];
+
+  $: [firstPlayer, _, secondPlayer] = selectedStyle.split(" ");
+  $: currentPlayer = history.length % 2 === 0 ? firstPlayer : secondPlayer;
+  $: otherPlayer = history.length % 2 !== 0 ? firstPlayer : secondPlayer;
 
   let history = [];
 
@@ -13,18 +31,18 @@
     let table = Array(size)
       .fill(0)
       .map(() => Array(size).fill(""));
-    history.forEach(([i, j], k) => {
-      table[i][j] = xo(k);
+    history.forEach(([x, y], k) => {
+      table[y][x] = xo(k);
     });
     return table;
   };
   $: table = genTable(history);
 
-  let getMoveHandler = (i, j) => ev => {
-    if (table[i][j] || winner) {
+  let getMoveHandler = (x, y) => ev => {
+    if (table[y][x] !== "" || !playing) {
       return;
     }
-    history = [...history, [i, j]];
+    history = [...history, [x, y]];
   };
 
   let getHistoryHandler = k => ev => {
@@ -65,9 +83,53 @@
     return winner;
   };
 
-  $: winner = victory(table);
-  $: playing = winner === "";
-  $: console.log({ winner });
+  let selectIaMove = table => {
+    let i = 0;
+    if (history.length === 0) {
+      let halfsize = Math.floor(size / 2);
+      let smalsize = Math.floor(size / 4);
+      let randpos = () => smalsize + randint(Math.random(), halfsize);
+      return [randpos(), randpos()];
+    }
+    let move, x, y;
+    do {
+      let [oldx, oldy] = randchoice(Math.random(), history);
+      let [dx, dy] = randchoice(Math.random(), around8);
+      x = oldx + dx;
+      y = oldy + dy;
+      move = [x, y];
+      i += 1;
+      if (i > (10 * size ** 2) ** 2) {
+        return undefined;
+      }
+    } while (table[y][x] !== "");
+    return move;
+  };
+
+  let aiPlay = () => {
+    if (currentPlayer === "AI") {
+      let table = genTable(history);
+      let move = selectIaMove(table);
+      if (move) {
+        let [x, y] = move;
+        if (table[y][x] === "") {
+          history = [...history, move];
+        }
+      } else {
+        console.error("could not play", { history, currentPlayer });
+      }
+    }
+  };
+
+  let autoplay = () => {
+    if (currentPlayer === "AI" && selectedAiStyle === "automatic") {
+      setTimeout(aiPlay, 750);
+    }
+  };
+
+  $: winner = location.href.includes("winner=x") ? "x" : victory(table);
+  $: playing = currentPlayer === "human" && winner === "";
+  $: autoplay(history, currentPlayer, selectedAiStyle);
 </script>
 
 <style>
@@ -115,6 +177,9 @@
   .inline {
     display: inline;
   }
+  .hidden {
+    visibility: hidden;
+  }
   .lowhight {
     height: 2em;
   }
@@ -123,6 +188,16 @@
   }
   .vmargin {
     margin: 1em 0;
+  }
+  .vpadding {
+    padding: 0.2em 0;
+  }
+  .hpadding {
+    padding-left: 1em;
+  }
+  #board.winner thead div {
+    border-top: 1px solid;
+    border-bottom: 1px solid;
   }
   #board.playing td.empty {
     margin-right: 2em;
@@ -156,10 +231,50 @@
     to win.
   </p>
 
-  <table class="inline" class:playing id="board">
+  <p>
+    Opponent(s): [{selectedStyle}] [
+    <label class="inline">
+      <input type="checkbox" bind:checked={opponentExpanded} />
+      Expand
+    </label>
+    ]
+    {#if opponentExpanded}
+      {#each styleList as style}
+        <label>
+          <input type="radio" bind:group={selectedStyle} value={style} />
+          {style}
+        </label>
+      {/each}
+    {/if}
+  </p>
+  {#if selectedStyle.includes('AI')}
+    <p>
+      AI style(s) [
+      <label class="inline">
+        <input type="checkbox" bind:checked={aiStyleExpanded} />
+        Expand
+      </label>
+      ]
+      {#if aiStyleExpanded}
+        {#each aiStyleList as style}
+          <label>
+            <input type="radio" bind:group={selectedAiStyle} value={style} />
+            {style}
+          </label>
+        {/each}
+      {/if}
+      <input
+        type="button"
+        value="AI play"
+        disabled={currentPlayer !== 'AI'}
+        on:click={aiPlay} />
+    </p>
+  {/if}
+
+  <table class="inline" class:playing class:winner id="board">
     <thead>
       <td colspan={size}>
-        <div class="vmargin hcenter">
+        <div class="vmargin vpadding hcenter">
           <span>
             {#if winner === ''}
               <table class="inline" id="nextPlayer">
@@ -181,11 +296,11 @@
       </td>
     </thead>
     <tbody>
-      {#each table as row, i}
+      {#each table as row, y}
         <tr>
-          {#each row as item, j}
+          {#each row as item, x}
             <td
-              on:click={getMoveHandler(i, j)}
+              on:click={getMoveHandler(x, y)}
               class={item !== '' ? item : 'empty'}>
               {item}
             </td>
@@ -199,7 +314,7 @@
     <thead>
       <th>n°</th>
       <th />
-      <th>i, j</th>
+      <th>x, y</th>
       <th />
     </thead>
     <tbody>
@@ -216,11 +331,11 @@
           {/if}
         </td>
       </tr>
-      {#each history as [i, j], k}
+      {#each history as [x, y], k}
         <tr>
           <th>{k + 1}</th>
           <td class={xo(k)}>{xo(k)}</td>
-          <td class="ij">{i}, {j}</td>
+          <td class="ij">{x}, {y}</td>
           <td>
             {#if k + 1 !== history.length}
               <input
