@@ -152,7 +152,8 @@
   <h1>Gomoku</h1>
 
   <p id="rules">
-    Fill a row, a column or a diagonal of five squares of your color to win.
+    Fill a row, a column or a diagonal of five consecutive squares of your color
+    to win.
   </p>
 
   <table class="inline" class:playing id="board">
