@@ -110,61 +110,6 @@
   $: console.log({ winner });
 </script>
 
-<style>
-  h1 {
-    color: purple;
-  }
-  #history td {
-    border: 1px solid;
-    text-align: center;
-    vertical-align: center;
-  }
-  td.x,
-  td.o,
-  td.empty {
-    --size: 1.5em;
-    width: var(--size);
-    height: var(--size);
-    border: 1px solid;
-    text-align: center;
-    vertical-align: center;
-  }
-  td.x {
-    background: rgb(255, 207, 179);
-  }
-  td.o {
-    background: rgb(205, 255, 129);
-  }
-  table {
-    border-collapse: collapse;
-    vertical-align: center;
-  }
-  .verticalMargin1 {
-    margin: 1em 0;
-  }
-  #nextPlayer th {
-    font-weight: normal;
-    padding-right: 1em;
-  }
-  #winner th {
-    padding-right: 1em;
-  }
-  .inline {
-    display: inline;
-  }
-  .lowhight {
-    height: 2em;
-  }
-  .vcenter {
-    vertical-align: center;
-  }
-  input[type='button'] {
-    margin: 0;
-    padding: 1px;
-    height: auto;
-  }
-</style>
-
 <h1>Gomoku</h1>
 
 <div class="verticalMargin1">
@@ -221,3 +166,58 @@
     {/each}
   </tbody>
 </table>
+
+<style>
+  h1 {
+    color: purple;
+  }
+  #history td {
+    border: 1px solid;
+    text-align: center;
+    vertical-align: center;
+  }
+  td.x,
+  td.o,
+  td.empty {
+    --size: 1.5em;
+    width: var(--size);
+    height: var(--size);
+    border: 1px solid;
+    text-align: center;
+    vertical-align: center;
+  }
+  td.x {
+    background: rgb(255, 207, 179);
+  }
+  td.o {
+    background: rgb(205, 255, 129);
+  }
+  table {
+    border-collapse: collapse;
+    vertical-align: center;
+  }
+  .verticalMargin1 {
+    margin: 1em 0;
+  }
+  #nextPlayer th {
+    font-weight: normal;
+    padding-right: 1em;
+  }
+  #winner th {
+    padding-right: 1em;
+  }
+  .inline {
+    display: inline;
+  }
+  .lowhight {
+    height: 2em;
+  }
+  .vcenter {
+    vertical-align: center;
+  }
+  input[type='button'] {
+    margin: 0;
+    padding: 1px;
+    height: auto;
+  }
+</style>
