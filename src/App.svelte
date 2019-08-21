@@ -132,97 +132,6 @@
   $: autoplay(history, currentPlayer, selectedAiStyle);
 </script>
 
-<style>
-  main {
-    max-width: 770px;
-    margin: 0 auto;
-    border-width: 0 1px 0 1px;
-    border-style: solid;
-    padding: 1em;
-  }
-  h1 {
-    color: purple;
-    margin-top: 0;
-  }
-  table {
-    border-collapse: collapse;
-    vertical-align: center;
-  }
-  input[type="button"] {
-    margin: 0;
-    padding: 1px;
-    height: auto;
-  }
-  td.x,
-  td.o,
-  td.empty {
-    --size: 1.5em;
-    width: var(--size);
-    height: var(--size);
-    border: 1px solid;
-    text-align: center;
-    vertical-align: top;
-  }
-  td.x {
-    background: rgb(255, 207, 179);
-  }
-  td.o {
-    background: rgb(205, 255, 129);
-  }
-  .hcenter {
-    text-align: center;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  .inline {
-    display: inline;
-  }
-  .hidden {
-    visibility: hidden;
-  }
-  .lowhight {
-    height: 2em;
-  }
-  .vcenter {
-    vertical-align: middle;
-  }
-  .vmargin {
-    margin: 1em 0;
-  }
-  .vpadding {
-    padding: 0.2em 0;
-  }
-  .hpadding {
-    padding-left: 1em;
-  }
-  #board.winner thead div {
-    border-top: 1px solid;
-    border-bottom: 1px solid;
-  }
-  #board.playing td.empty {
-    margin-right: 2em;
-    cursor: pointer;
-  }
-  #board tbody {
-    border: 2px solid;
-  }
-  #history td {
-    border: 1px solid;
-    text-align: center;
-    vertical-align: center;
-  }
-  #history .ij {
-    min-width: 3em;
-  }
-  #nextPlayer th {
-    font-weight: normal;
-    padding-right: 1em;
-  }
-  #winner th {
-    padding-right: 1em;
-  }
-</style>
-
 <main>
   <h1>Gomoku</h1>
 
@@ -349,3 +258,94 @@
     </tbody>
   </table>
 </main>
+
+<style>
+  main {
+    max-width: 770px;
+    margin: 0 auto;
+    border-width: 0 1px 0 1px;
+    border-style: solid;
+    padding: 1em;
+  }
+  h1 {
+    color: purple;
+    margin-top: 0;
+  }
+  table {
+    border-collapse: collapse;
+    vertical-align: center;
+  }
+  input[type="button"] {
+    margin: 0;
+    padding: 1px;
+    height: auto;
+  }
+  td.x,
+  td.o,
+  td.empty {
+    --size: 1.5em;
+    width: var(--size);
+    height: var(--size);
+    border: 1px solid;
+    text-align: center;
+    vertical-align: top;
+  }
+  td.x {
+    background: rgb(255, 207, 179);
+  }
+  td.o {
+    background: rgb(205, 255, 129);
+  }
+  .hcenter {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .inline {
+    display: inline;
+  }
+  .hidden {
+    visibility: hidden;
+  }
+  .lowhight {
+    height: 2em;
+  }
+  .vcenter {
+    vertical-align: middle;
+  }
+  .vmargin {
+    margin: 1em 0;
+  }
+  .vpadding {
+    padding: 0.2em 0;
+  }
+  .hpadding {
+    padding-left: 1em;
+  }
+  #board.winner thead div {
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+  }
+  #board.playing td.empty {
+    margin-right: 2em;
+    cursor: pointer;
+  }
+  #board tbody {
+    border: 2px solid;
+  }
+  #history td {
+    border: 1px solid;
+    text-align: center;
+    vertical-align: center;
+  }
+  #history .ij {
+    min-width: 3em;
+  }
+  #nextPlayer th {
+    font-weight: normal;
+    padding-right: 1em;
+  }
+  #winner th {
+    padding-right: 1em;
+  }
+</style>
