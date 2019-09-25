@@ -1,6 +1,6 @@
 # Gomoku game
 
-Made with love using Svelte.
+Made using Svelte.
 
 ## Authors
 
