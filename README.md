@@ -1,5 +1,7 @@
 # Gomoku game
 
+![gomoku-svelte-screenshot](./doc/gomoku-svelte-screenshot.png)
+
 Made using Svelte.
 
 ## Authors
